@@ -3,9 +3,18 @@ project(2048)
 
 set(CMAKE_CXX_STANDARD 17)
 
-# Find SFML
-set(SFML_DIR "SFML/lib/cmake/SFML")
-find_package(SFML 2.5 COMPONENTS system window graphics REQUIRED)
+# Use FetchContent to download SFML at configure time
+include(FetchContent)
+
+# Set up SFML FetchContent
+FetchContent_Declare(
+        SFML
+        GIT_REPOSITORY https://github.com/SFML/SFML.git
+        GIT_TAG 2.5.1  # The version of SFML you want to use, here 2.5.1
+)
+
+# Make SFML available
+FetchContent_MakeAvailable(SFML)
 
 # Glob all .cpp and .h files in src directory
 file(GLOB_RECURSE SOURCES "src/*.cpp" "src/*.h")
@@ -21,18 +30,20 @@ add_executable(2048 ${SOURCES}
         src/Game/Gamestate/Singleplayer.cpp
         src/Game/Gamestate/Singleplayer.h
         src/Game/Gamestate/AImode.cpp
-        src/Game/Gamestate/AImode.h
-        src/Game/Gamestate/Menu.cpp
-        src/Game/Gamestate/Menu.h)
+        src/Game/Gamestate/AImode.h)
 
 # Link SFML libraries
 target_link_libraries(2048 PUBLIC sfml-system sfml-window sfml-graphics)
 
-# Copy SFML DLLs to the output directory
-set(SFML_DLLS "${SFML_DIR}/../../../bin")
-file(GLOB SFML_DLL_FILES "${SFML_DLLS}/*.dll")
-foreach(DLL ${SFML_DLL_FILES})
-    add_custom_command(TARGET 2048 POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${DLL}" $<TARGET_FILE_DIR:2048>)
-endforeach()
+# Path to the folder where additional DLLs are stored
+set(ADDITIONAL_DLL_PATH "path/to/dlls")  # Modify this to the correct path
+
+# Copy SFML and other required DLLs to the output directory
+add_custom_command(TARGET 2048 POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_RUNTIME_DLLS:2048> $<TARGET_FILE_DIR:2048>
+        "${ADDITIONAL_DLL_PATH}/libstdc++6.dll" $<TARGET_FILE_DIR:2048>
+        "${ADDITIONAL_DLL_PATH}/libstdc++-6.dll" $<TARGET_FILE_DIR:2048>
+        "${ADDITIONAL_DLL_PATH}/libgcc_s_seh-1.dll" $<TARGET_FILE_DIR:2048>
+        COMMAND_EXPAND_LISTS
+)
