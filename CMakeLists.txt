@@ -21,7 +21,9 @@ add_executable(2048 ${SOURCES}
         src/Game/Gamestate/Singleplayer.cpp
         src/Game/Gamestate/Singleplayer.h
         src/Game/Gamestate/AImode.cpp
-        src/Game/Gamestate/AImode.h)
+        src/Game/Gamestate/AImode.h
+        src/Game/Gamestate/Menu.cpp
+        src/Game/Gamestate/Menu.h)
 
 # Link SFML libraries
 target_link_libraries(2048 PUBLIC sfml-system sfml-window sfml-graphics)
