@@ -10,7 +10,7 @@ include(FetchContent)
 FetchContent_Declare(
         SFML
         GIT_REPOSITORY https://github.com/SFML/SFML.git
-        GIT_TAG 2.5.1  # The version of SFML you want to use, here 2.5.1
+        GIT_TAG 2.6.1  # The version of SFML you want to use, here 2.6.1
 )
 
 # Make SFML available
@@ -38,12 +38,22 @@ target_link_libraries(2048 PUBLIC sfml-system sfml-window sfml-graphics)
 # Path to the folder where additional DLLs are stored
 set(ADDITIONAL_DLL_PATH "path/to/dlls")  # Modify this to the correct path
 
-# Copy SFML and other required DLLs to the output directory
+# Copy SFML DLLs to the output directory
 add_custom_command(TARGET 2048 POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_RUNTIME_DLLS:2048> $<TARGET_FILE_DIR:2048>
-        "${ADDITIONAL_DLL_PATH}/libstdc++6.dll" $<TARGET_FILE_DIR:2048>
-        "${ADDITIONAL_DLL_PATH}/libstdc++-6.dll" $<TARGET_FILE_DIR:2048>
-        "${ADDITIONAL_DLL_PATH}/libgcc_s_seh-1.dll" $<TARGET_FILE_DIR:2048>
-        COMMAND_EXPAND_LISTS
-)
+        COMMAND_EXPAND_LISTS)
+
+# Find MinGW libraries if applicable
+if (MINGW)
+
+    # Extract the directory where the g++ (MinGW) compiler resides
+    get_filename_component(MINGW_BIN_DIR "${CMAKE_CXX_COMPILER}" DIRECTORY)
+
+    add_custom_command(TARGET 2048 POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${MINGW_BIN_DIR}/libstdc++-6.dll"
+            "${MINGW_BIN_DIR}/libgcc_s_seh-1.dll"
+            "${MINGW_BIN_DIR}/libwinpthread-1.dll"
+            $<TARGET_FILE_DIR:2048>)
+endif()
