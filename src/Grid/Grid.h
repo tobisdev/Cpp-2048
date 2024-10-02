@@ -19,8 +19,8 @@ private:
     int _size;
 
 public:
-    Grid();
-    Grid(int size);
+    Grid() = default;
+    explicit Grid(int size);
 
     void move(Direction direction);
 
@@ -32,6 +32,8 @@ public:
     bool isGameOver();
 
     int getSum();
+    int getEmptyTiles();
+    std::vector<int> getLinearVector();
 };
 
 

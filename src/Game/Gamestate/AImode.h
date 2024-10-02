@@ -6,11 +6,14 @@
 #define INC_2048_AIMODE_H
 
 #include "Gamestate.h"
+#include "../../Grid/Grid.h"
 #include "../../AI/Agent/Agent.h"
 
 class AImode : public Gamestate {
 private:
-    Agent agent;
+    Agent _agent;
+    std::vector<Grid> _grids;
+    std::vector<int> _points;
 public:
     explicit AImode(int size, int AIs);
     void update(float deltaTime, float speed) override;

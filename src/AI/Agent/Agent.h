@@ -6,7 +6,7 @@
 #define GAN_AGENT_H
 
 #include <vector>
-#include "../../Network/Network.h"
+#include "../Network/Network.h"
 
 class Agent {
 private:

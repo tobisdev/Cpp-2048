@@ -236,3 +236,31 @@ void Grid::render(sf::RenderWindow &window, sf::Font &font) {
         }
     }
 }
+
+int Grid::getEmptyTiles() {
+    int empty = 0;
+
+    for (int i = 0; i < _size; ++i) {
+        for (int j = 0; j < _size; ++j) {
+            if(_tiles[i][j] == nullptr){
+                empty++;
+            }
+        }
+    }
+
+    return empty;
+}
+
+std::vector<int> Grid::getLinearVector() {
+    std::vector<int> vect(_size * _size, 0);
+
+    for (int i = 0; i < _size; ++i) {
+        for (int j = 0; j < _size; ++j) {
+            if(_tiles[i][j] != nullptr){
+                vect[i + _size * j] = _tiles[i][j]->power();
+            }
+        }
+    }
+
+    return vect;
+}
