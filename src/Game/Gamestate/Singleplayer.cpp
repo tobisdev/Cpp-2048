@@ -33,6 +33,6 @@ void Singleplayer::handleEvents(sf::Event &event) {
 
     if(_grid.isGameOver()){
         std::cout << "You lost!\n============================\nYou got " << _grid.getSum() << " Points!\n\n";
-        _grid = {4};
+        _grid = Grid(_grid.size());
     }
 }

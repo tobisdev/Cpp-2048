@@ -10,32 +10,44 @@ Agent::Agent(int n, std::vector<int> &topology, std::vector<Activations> &activa
     }
 }
 
-void Agent::breed(std::vector<float> fitness, int winners, int mutationIndex, float maxMutation) {
+void Agent::breed(std::vector<float> &fitness, int winners, int mutationIndex, float maxMutation) {
     int nets = _networks.size();
     std::vector<Network> parents;
 
-    for (int i = 0; i < winners; ++i) {
-        int maxIdx = 0;
-        for (int j = 0; j < fitness.size(); ++j) {
-            if(fitness[j] > fitness[maxIdx]){
-                maxIdx = j;
-            }
+    // Use a min-heap to track the winners networks
+    using FitnessIndexPair = std::pair<float, int>;
+    std::priority_queue<FitnessIndexPair, std::vector<FitnessIndexPair>, std::greater<>> minHeap;
+
+    for (int i = 0; i < fitness.size(); ++i) {
+        if (minHeap.size() < winners) {
+            minHeap.emplace(fitness[i], i);
+        } else if (fitness[i] > minHeap.top().first) {
+            minHeap.pop();
+            minHeap.emplace(fitness[i], i);
         }
-        parents.emplace_back(_networks[maxIdx]);
-        //_networks.erase(_networks.begin() + maxIdx);
-        fitness.erase(fitness.begin() + maxIdx);
     }
 
-    _networks.clear();
+    // Store the networks of the top winners
+    parents.reserve(winners); // Reserve space for winners
+    while (!minHeap.empty()) {
+        int maxIdx = minHeap.top().second;
+        minHeap.pop();
+        parents.emplace_back(_networks[maxIdx]); // Keep the top performing networks
+    }
 
+    // Clear the networks and insert the parents back
+    _networks.clear();
+    _networks.reserve(nets); // Reserve space for all networks
     _networks.insert(_networks.begin(), parents.begin(), parents.end());
 
+    // Breeding phase - generate child networks
     int cnt = winners;
 
-    while(cnt < nets){
-        for (int i = 0; i < winners; ++i) {
-            for (int j = 0; j < winners; ++j) {
-                if(i != j && cnt < nets){
+    while (cnt < nets) {
+        for (int i = 0; i < winners && cnt < nets; ++i) {
+            for (int j = 0; j < winners && cnt < nets; ++j) {
+                if (i != j) {
+                    // Create child from parents[i] and parents[j], mutate it, and add to the network
                     _networks.emplace_back(createChild(parents[i], parents[j], mutationIndex, maxMutation));
                     cnt++;
                 }

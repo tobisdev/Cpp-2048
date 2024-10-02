@@ -11,6 +11,7 @@
 #include "../Grid/Grid.h"
 #include "Gamestate/Gamestate.h"
 #include "Gamestate/Singleplayer.h"
+#include "Gamestate/AImode.h"
 #include "Gamestate/Menu.h"
 
 class Game : public sf::RenderWindow {
@@ -21,8 +22,8 @@ private:
     std::chrono::time_point<std::chrono::system_clock> _previousTime;
 
     sf::Font _globalFont;
-
-    Gamestate *gamestate = new Menu();
+    Gamestate *gamestate = new Singleplayer(4);
+    //Gamestate *gamestate = new AImode(4, 200);
 public:
     Game();
     Game(sf::Vector2i size, std::string title);

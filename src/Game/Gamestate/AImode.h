@@ -11,9 +11,14 @@
 
 class AImode : public Gamestate {
 private:
+    int _move = 0;
+    int _maxMove = 100;
+    int _generation = 0;
+    float _previousPoints = 0.1f;
+
     Agent _agent;
     std::vector<Grid> _grids;
-    std::vector<int> _points;
+    std::vector<float> _points;
 public:
     explicit AImode(int size, int AIs);
     void update(float deltaTime, float speed) override;

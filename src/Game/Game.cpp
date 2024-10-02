@@ -50,7 +50,7 @@ void Game::update() {
     }
 
     // Update gamestate
-    gamestate->update(_deltaTime, 45.0f);
+    gamestate->update(_deltaTime, 10.0f);
 }
 
 void Game::render() {

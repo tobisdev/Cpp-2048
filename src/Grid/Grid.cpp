@@ -16,6 +16,17 @@ Grid::Grid(int size) : _size(size) {
     placeRandomNumber();
 }
 
+Grid::~Grid() {
+    for (int i = 0; i < _size; ++i) {
+        for (int j = 0; j < _size; ++j) {
+            if(_tiles[i][j]){
+                delete _tiles[i][j];
+                _tiles[i][j] = nullptr;
+            }
+        }
+    }
+}
+
 void Grid::placeRandomNumber() {
     std::random_device dev;
     std::mt19937 rng(dev());
@@ -26,7 +37,7 @@ void Grid::placeRandomNumber() {
     int randX = distPos(rng);
     int randY = distPos(rng);
 
-    int cnt;
+    int cnt = 0;
 
     while(_tiles[randX][randY] != nullptr){
         randX = distPos(rng);
@@ -133,7 +144,9 @@ int Grid::getSum() {
     int sum = 0;
     for (int i = 0; i < _size; ++i) {
         for (int j = 0; j < _size; ++j) {
-            sum += pow(2, _tiles[i][j]->power());
+            if(_tiles[i][j] != nullptr){
+                sum += pow(2, _tiles[i][j]->power());
+            }
         }
     }
     return sum;
@@ -251,16 +264,30 @@ int Grid::getEmptyTiles() {
     return empty;
 }
 
-std::vector<int> Grid::getLinearVector() {
-    std::vector<int> vect(_size * _size, 0);
+std::vector<float> Grid::getLinearVector() {
+    std::vector<float> vect(_size * _size, 0.0f);
 
     for (int i = 0; i < _size; ++i) {
         for (int j = 0; j < _size; ++j) {
             if(_tiles[i][j] != nullptr){
-                vect[i + _size * j] = _tiles[i][j]->power();
+                vect[j + _size * i] = 1.0f / _tiles[i][j]->power();
             }
         }
     }
 
     return vect;
+}
+
+int Grid::getBiggestTile() {
+    int biggest = 0;
+
+    for (int i = 0; i < _size; ++i) {
+        for (int j = 0; j < _size; ++j) {
+            if(_tiles[i][j] != nullptr){
+                biggest = (_tiles[i][j]->power() > biggest) ? _tiles[i][j]->power() : biggest;
+            }
+        }
+    }
+
+    return pow(2, biggest);
 }

@@ -6,6 +6,9 @@
 #define GAN_AGENT_H
 
 #include <vector>
+#include <algorithm>
+#include <queue>
+#include <utility>
 #include "../Network/Network.h"
 
 class Agent {
@@ -17,7 +20,7 @@ public:
 
     Agent(int, std::vector<int> &topology, std::vector<Activations> &activations, float min, float max);
 
-    void breed(std::vector<float>, int, int, float);
+    void breed(std::vector<float> &fitness, int winners, int mutationIndex, float maxMutation);
 
     int size();
 

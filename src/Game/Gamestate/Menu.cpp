@@ -54,3 +54,7 @@ void Menu::render(sf::RenderWindow &window, sf::Font &font) {
 void Menu::handleEvents(sf::Event &event) {
 
 }
+
+void Menu::update(float deltaTime, float speed) {
+
+}

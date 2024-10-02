@@ -20,7 +20,8 @@ private:
 
 public:
     Grid() = default;
-    explicit Grid(int size);
+    Grid(int size);
+    ~Grid();
 
     void move(Direction direction);
 
@@ -32,8 +33,12 @@ public:
     bool isGameOver();
 
     int getSum();
+    int getBiggestTile();
     int getEmptyTiles();
-    std::vector<int> getLinearVector();
+    std::vector<float> getLinearVector();
+
+    [[nodiscard]] int size() {return this->_size;};
+    [[nodiscard]] std::vector<Tile *> &operator[] (int i) {return this->_tiles[i];}
 };
 
 
