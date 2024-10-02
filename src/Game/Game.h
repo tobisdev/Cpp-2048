@@ -11,6 +11,7 @@
 #include "../Grid/Grid.h"
 #include "Gamestate/Gamestate.h"
 #include "Gamestate/Singleplayer.h"
+#include "Gamestate/Menu.h"
 
 class Game : public sf::RenderWindow {
 private:
@@ -21,7 +22,7 @@ private:
 
     sf::Font _globalFont;
 
-    Gamestate *gamestate = new Singleplayer(4);
+    Gamestate *gamestate = new Menu();
 public:
     Game();
     Game(sf::Vector2i size, std::string title);
