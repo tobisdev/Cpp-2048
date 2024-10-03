@@ -289,5 +289,42 @@ int Grid::getBiggestTile() {
         }
     }
 
-    return pow(2, biggest);
+    return biggest;
+}
+
+float Grid::evaluateCornerClustering() {
+    float cornerReward = 0.0f;;
+
+    // Corner positions
+    std::vector<std::pair<int, int>> corners = {
+            {0, 0}, {0, _size - 1}, {_size - 1, 0}, {_size - 1, _size - 1}
+    };
+
+    for (const auto &corner : corners) {
+        if(_tiles[corner.first][corner.second] != nullptr){
+            cornerReward += 2.0f * _tiles[corner.first][corner.second]->power();
+        }
+    }
+
+    return cornerReward;
+}
+
+float Grid::calculateMonotonicity() {
+    float monotonicity = 0.0f;
+
+    // Check rows and columns for monotonicity
+    for (int row = 0; row < _size; ++row) {
+        for (int col = 0; col < _size - 1; ++col) {
+            // Monotonic in rows
+            if (_tiles[row][col] != nullptr && _tiles[row][col + 1] != nullptr && _tiles[row][col]->power() >= _tiles[row][col + 1]->power()) {
+                monotonicity += 1.0f;
+            }
+            // Monotonic in columns
+            if (_tiles[col + 1][row] != nullptr && _tiles[col][row] != nullptr && _tiles[col][row]->power() >= _tiles[col + 1][row]->power()) {
+                monotonicity += 1.0f;
+            }
+        }
+    }
+
+    return monotonicity;
 }

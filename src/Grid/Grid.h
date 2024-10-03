@@ -32,6 +32,9 @@ public:
 
     bool isGameOver();
 
+
+    float calculateMonotonicity();
+    float evaluateCornerClustering();
     int getSum();
     int getBiggestTile();
     int getEmptyTiles();

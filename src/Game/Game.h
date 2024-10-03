@@ -22,8 +22,8 @@ private:
     std::chrono::time_point<std::chrono::system_clock> _previousTime;
 
     sf::Font _globalFont;
-    Gamestate *gamestate = new Singleplayer(4);
-    //Gamestate *gamestate = new AImode(4, 200);
+    //Gamestate *gamestate = new Singleplayer(4);
+    Gamestate *gamestate = new AImode(4, 200);
 public:
     Game();
     Game(sf::Vector2i size, std::string title);

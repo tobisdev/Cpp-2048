@@ -5,7 +5,7 @@
 #include "AImode.h"
 
 AImode::AImode(int size, int AIs) {
-    float min = 0.25f;
+    float min = -0.85f;
     float max = 0.85f;
 
     std::vector<int> topology = {
@@ -32,7 +32,7 @@ void AImode::update(float deltaTime, float speed) {
     if(_move > _maxMove){
 
         for (int i = 0; i < _points.size(); ++i) {
-            _points[i] = _grids[i].getSum() + 2 * _grids[i].getBiggestTile() + 5 * _grids[i].getEmptyTiles();
+            _points[i] = _grids[i].getEmptyTiles() + _grids[i].calculateMonotonicity() + _grids[i].evaluateCornerClustering() + 5.0f * _grids[i].getBiggestTile();
             //std::cout << "Gen: " << _generation << "\tAI: " << i << "\tPoints: "<< _points[i] << "\n";
         }
 
